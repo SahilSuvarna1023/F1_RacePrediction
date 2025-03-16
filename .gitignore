@@ -5,8 +5,8 @@ __pycache__/
 .DS_Store
 
 # Ignore large model files
-models/
-*.pkl
+# models/
+# *.pkl
 
 # Ignore dataset files
 data/
