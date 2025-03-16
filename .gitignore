@@ -1,0 +1,17 @@
+# Ignore virtual environment
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Ignore large model files
+models/
+*.pkl
+
+# Ignore dataset files
+data/
+*.csv
+
+# Ignore output logs
+output/
+logs/
