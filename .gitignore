@@ -8,9 +8,9 @@ __pycache__/
 # models/
 # *.pkl
 
-# Ignore dataset files
-data/
-*.csv
+# # Ignore dataset files
+# data/
+# *.csv
 
 # Ignore output logs
 output/
