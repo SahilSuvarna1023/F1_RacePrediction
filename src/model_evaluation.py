@@ -1,6 +1,7 @@
 import joblib
 import pandas as pd
 import numpy as np
+import os
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from scipy.stats import ttest_ind
 
@@ -13,17 +14,30 @@ models = {
 # ✅ Load the scaler
 scaler = joblib.load("models/scaler.pkl")
 
+# ✅ Load the feature list used during training
+trained_features = joblib.load("models/selected_features.pkl")
+
+# ✅ Define dataset path
+MERGED_DATA_PATH = "data/merged/cleaned_merged_data2.csv"
+
+# ✅ Check if dataset exists
+if not os.path.exists(MERGED_DATA_PATH):
+    raise FileNotFoundError(f"🚨 Dataset not found at {MERGED_DATA_PATH}. Please check `data_merging.py`.")
+
 # ✅ Load test dataset
-MERGED_DATA_PATH = "data/merged/cleaned_merged_data.csv"
 df = pd.read_csv(MERGED_DATA_PATH)
 
-# ✅ Select features & target
-selected_features = ["grid", "driver_experience", "avg_team_points", "laps", "year"]
-target = "positionOrder"
+# ✅ Ensure all trained features exist in the dataset
+missing_features = [col for col in trained_features if col not in df.columns]
+if missing_features:
+    raise KeyError(f"🚨 Missing Features in Dataset: {missing_features}. Please check `data_merging.py`.")
 
 # ✅ Prepare test data
-X_test = df[selected_features].tail(100)  # Last 100 races for testing
-y_test = df[target].tail(100)
+X_test = df[trained_features].tail(100)  # Last 100 races for testing
+y_test = df["positionOrder"].tail(100)  # Ensure target column matches training
+
+# ✅ Handle missing values before scaling
+X_test.fillna(X_test.mean(), inplace=True)
 
 # ✅ Scale test data
 X_test_scaled = scaler.transform(X_test)
@@ -46,7 +60,7 @@ for model_name, model in models.items():
     print(f"   - RMSE: {rmse:.4f}")
     print(f"   - R² Score: {r2:.4f}")
 
-# ✅ Conduct T-Test
+# ✅ Conduct T-Test Between Models
 print("\n📊 Conducting T-Test Between Models:")
 
 rf_preds = predictions["Random Forest"]
@@ -62,3 +76,5 @@ if p_value < 0.05:
     print("   🔥 Significant difference detected!")
 else:
     print("   ✅ No significant difference, models perform similarly.")
+
+print("\n✅ Model Evaluation Complete!")
