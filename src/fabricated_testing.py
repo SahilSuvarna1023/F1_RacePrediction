@@ -18,7 +18,7 @@ FABRICATED_DATA_PATH = "data/fabricated_test_data.csv"
 fabricated_df = pd.read_csv(FABRICATED_DATA_PATH)
 
 # ✅ Select features
-selected_features = ["grid", "driver_experience", "avg_team_points", "laps", "year"]
+selected_features = ["grid", "driver_experience", "avg_team_points", "laps", "year",  "constructor_standings", "constructor_points"]
 X_fabricated = fabricated_df[selected_features]
 
 # ✅ Scale fabricated test data
