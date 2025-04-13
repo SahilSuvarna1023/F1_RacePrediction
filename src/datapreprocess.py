@@ -1,10 +1,9 @@
 import pandas as pd
 import os
 
-# Define the path to the data folder
 DATA_PATH = "data/"
 
-# List of dataset filenames
+
 file_names = {
     "circuits": "circuits.csv",
     "constructor_results": "constructor_results.csv",
@@ -22,7 +21,7 @@ file_names = {
     "status": "status.csv",
 }
 
-# Load datasets into Pandas DataFrames
+
 dataframes = {}
 for key, file in file_names.items():
     file_path = os.path.join(DATA_PATH, file)
@@ -32,7 +31,6 @@ for key, file in file_names.items():
     else:
         print(f"Warning: {file} not found!")
 
-# Function to check missing values
 def check_missing_values():
     missing_values = {name: df.isnull().sum().sum() for name, df in dataframes.items()}
     print("\nMissing Values Summary:")
@@ -41,16 +39,16 @@ def check_missing_values():
 
 check_missing_values()
 
-# Handle missing values (basic strategy)
+
 for name, df in dataframes.items():
-    df.fillna(method='ffill', inplace=True)  # Forward fill for missing values
-    df.fillna(method='bfill', inplace=True)  # Backward fill for missing values
+    df.fillna(method='ffill', inplace=True)  
+    df.fillna(method='bfill', inplace=True) 
 
 print("\nMissing values handled successfully!")
 
-# Convert data types
+
 def convert_data_types():
-    # Convert integer columns
+ 
     for df_name, df in dataframes.items():
         for col in df.select_dtypes(include=['float']).columns:
             if df[col].dropna().apply(float.is_integer).all():
@@ -59,7 +57,6 @@ def convert_data_types():
 
 convert_data_types()
 
-# Save cleaned datasets
 CLEANED_DATA_PATH = "data/cleaned/"
 os.makedirs(CLEANED_DATA_PATH, exist_ok=True)
 
