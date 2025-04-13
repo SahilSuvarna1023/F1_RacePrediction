@@ -4,27 +4,27 @@ import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from scipy.stats import ttest_ind
 
-# ✅ Load trained models
+#  Load trained models
 models = {
     "Random Forest": joblib.load("models/best_random_forest.pkl"),
     "XGBoost": joblib.load("models/best_xgboost.pkl"),
 }
 
-# ✅ Load the scaler
+#  Load the scaler
 scaler = joblib.load("models/scaler.pkl")
 
-# ✅ Load fabricated test dataset
+#  Load fabricated test dataset
 FABRICATED_DATA_PATH = "data/fabricated_test_data.csv"
 fabricated_df = pd.read_csv(FABRICATED_DATA_PATH)
 
-# ✅ Select features
+#  Select features
 selected_features = ["grid", "driver_experience", "avg_team_points", "laps", "year",  "constructor_standings", "constructor_points"]
 X_fabricated = fabricated_df[selected_features]
 
-# ✅ Scale fabricated test data
+#  Scale fabricated test data
 X_fabricated_scaled = scaler.transform(X_fabricated)
 
-# ✅ Store predictions for all models
+#  Store predictions for all models
 predictions = {}
 
 print("\n📊 Model Performance on Fabricated Data:")
@@ -35,7 +35,7 @@ for model_name, model in models.items():
     print(f"\n🏎️ {model_name} Predictions (First 5 Samples):")
     print(preds[:5])
 
-# ✅ Conduct T-Test to compare Random Forest vs XGBoost
+#  Conduct T-Test to compare Random Forest vs XGBoost
 print("\n📊 Conducting T-Test Between Models:")
 rf_preds = predictions["Random Forest"]
 xgb_preds = predictions["XGBoost"]
